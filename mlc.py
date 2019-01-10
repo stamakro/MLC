@@ -7,6 +7,8 @@ from sklearn.model_selection import KFold
 
 def tvalueG(w, X, y, a):
 
+		
+
 		#determine genes with and without GO term (positive and negative genes)
         pos = np.where(y)[0]
         neg = np.where(y == 0)[0]
@@ -42,12 +44,15 @@ def tvalueG(w, X, y, a):
 
         #calculate the t-value:
         '''
-
+         t = \frac{X_1 - X_2}{\sqrt{\frac{\sigma_1^2}{N_1} + \frac{\sigma_2^2}{N_2}}}
         '''
         numerator = (X1 - X2)
         denominator = np.sqrt((v1 / Npp) + (v2 / Npn))
 
         t = numerator / denominator
+
+
+        #calculate the partial derivatives of t with respect to the weights w
 
         gradient = np.zeros((X.shape[1],))
 
