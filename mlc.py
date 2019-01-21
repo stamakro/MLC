@@ -1,14 +1,29 @@
 import numpy as np
 from scipy.optimize import minimize
 
-#only need for testing and calculating performance
+#only needed for testing and calculating performance
 from sklearn.model_selection import KFold
-8from sklearn.metrics import roc_auc_score
+from sklearn.metrics import roc_auc_score
 
 def tvalueG(w, X, y, a):
+        '''
 
-		
+Calculates the current value of the MLC objective function as well as its parital derivatives with
+respect to the weights vector w. It is called multiple times during the optimization process
 
+Input Arguments:
+w: an array of length #samples containing sample weights
+X: a 2-d gene expression array (#genes x #samples)
+y: a label vector of length #genes, y[i] == 1 iff gene i is annotated with the Go term/pathway in question and 0 otherwise
+a: floating point, the regulatization parameter of the MLC objective
+
+Returns:
+A tuple.
+The first element is a floating point containing the value of the cost function given the inputs
+The second is an array of size #samples containing the partial derivatives of the cost function with respect
+to the weights
+
+        '''
 		#determine genes with and without GO term (positive and negative genes)
         pos = np.where(y)[0]
         neg = np.where(y == 0)[0]
@@ -111,7 +126,22 @@ def tvalueG(w, X, y, a):
 
 
 def mlcTrain(Xtrain, ytrain, a, w0=None, maxIter=30):
+        '''
 
+Calculates the current value of the MLC objective function as well as its parital derivatives with
+respect to the weights vector w. It is called multiple times during the optimization process
+
+Input Arguments:
+Xtrain: a 2-d gene expression array (#genes x #samples)
+ytrain: a label vector of length #genes, y[i] == 1 iff gene i is annotated with the Go term/pathway in question and 0 otherwise
+a:      a floating point, the regulatization parameter of the MLC objective
+w0:     an array of size #samples containing an initial estimate of the weights. If None (default), all weights are initialized to 1
+maxIter:the maximum number of iterations to be performed by the numerical optimizer. Defaults to 30.
+
+Returns:
+An array of size #samples containing the learned sample weights
+
+        '''
 	[N, f] = Xtrain.shape
 	ytrain = ytrain.reshape(-1,)
 
@@ -131,8 +161,8 @@ def mlcPredict(Xtrain, ytrain, Xtest, w):
 	pass
 
 
-def pccPredict():
-
+def pccPredict(Xtrain, ytrain, Xtest):
+    pass
 
 
 if __name__ == "__main__":
