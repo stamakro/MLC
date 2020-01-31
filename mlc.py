@@ -6,8 +6,35 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import roc_auc_score
 
 
-#make a test
+def mlcPredictPU(Xtrain, ytrain, Xtest, w, method='average', k=10):
+	'''
+k-NN classifier with the weighted inner product of MLC as a distance function
+TO BE UPDATED!!!!
+Input Arguments:
+Xtrain: training set, a 2-d gene expression array (#genes_train x #samples)
+ytrain: training labels, a label vector of length #genes_train, y[i] == 1 iff gene i is annotated with the Go term/pathway in question and 0 otherwise
+Xtest:  test set, a 2-d gene expression array (#genes_test x #samples)
+w:      an array of size #samples that contains the weights learned by MLC during training
+k:      the number of nearest neighbors to consider
 
+Returns:
+An array of size #genes_test containing the posterior probability that each gene is associated with the label
+
+	'''
+	assert method == 'average' or method == 'max'
+
+
+	Ctest = (Xtest * w).dot(Xtrain.T)
+
+	if method == 'average':
+		assert k > 0
+
+		return np.mean(np.sort(Ctest[:, ytrain==1], axis=1)[:, -k:], axis=1)
+		
+	else:
+		return np.max(Ctest[:, ytrain == 1], axis=1)
+
+#original code
 def tvalueG(w, X, y, a):
         '''
 
@@ -44,10 +71,10 @@ to the weights
         indices = np.triu_indices(N1, k=1)
         #all pairwise weighted inner products of positive gene pairs
         Spp = (Xpos * w).dot(Xpos.T)[indices].flatten()
-        
+
 		#all pairwise weighted inner products of positive-negative gene pairs
         Spn = (Xpos * w).dot(Xneg.T).flatten()
-        
+
         #mean and variance of weighted inner products for t-test
         X1 = np.mean(Spp)
         X2 = np.mean(Spn)
@@ -156,7 +183,7 @@ An array of size #samples containing the learned sample weights
 	np.random.seed(2312)
 	maxnr = 100
 	pos = np.random.permutation(pos)[:maxnr]
-	neg = np.random.permutation(neg)[:maxnr] 
+	neg = np.random.permutation(neg)[:maxnr]
 
 	ii = np.hstack((pos, neg))
 	ytrain = ytrain[ii]
@@ -235,7 +262,7 @@ if __name__ == "__main__":
 	#split into training and test sets
 	Xtrain, Xtest, ytrain, ytest = train_test_split(X, y, test_size=0.333)
 
-	print('Training MLC...') 
+	print('Training MLC...')
 	#learn weights in training set, setting a to 0.9
 	w = mlcTrain(Xtrain, ytrain, 0.9, w0=None, maxIter=30)
 
@@ -257,6 +284,3 @@ if __name__ == "__main__":
 
 	print ('Performance of PCC:', auc_pcc)
 	print ('Performance of MLC:', auc_mlc)
-
-
-
