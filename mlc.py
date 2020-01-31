@@ -160,7 +160,7 @@ An array of size #samples containing the learned sample weights
 	Xtrain = Xtrain[ii]
 
 	#bounds for weights, constraint each w[i] to be non-negative
-	bb = tuple([(0.0, np.inf) for i in xrange(X.shape[1])])
+	bb = tuple([(0.0, np.inf) for i in xrange(Xtrain.shape[1])])
 
 	#minimize cost function
 	solution = minimize(tvalueG, w0, args=(Xtrain, ytrain, a), jac=True, bounds=bb, options={'maxiter': maxIter})
