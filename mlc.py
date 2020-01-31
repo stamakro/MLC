@@ -5,6 +5,9 @@ from scipy.optimize import minimize
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import roc_auc_score
 
+
+#make a test
+
 def tvalueG(w, X, y, a):
         '''
 
