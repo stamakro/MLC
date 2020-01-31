@@ -100,7 +100,7 @@ to the weights
                 for jj in xrange(neg.shape[0]):
                         counter += 1
 
-                        dv2_dw += (Spn[counter] - X1) * (Xpos[ii]*Xneg[jj] - dx2_dw)
+                        dv2_dw += (Spn[counter] - X2) * (Xpos[ii]*Xneg[jj] - dx2_dw)
 
 
         dv2_dw /= (Npn - 1)
