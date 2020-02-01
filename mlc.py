@@ -11,14 +11,15 @@ def mlcPredictPU(Xtrain, ytrain, Xtest, w, method='average', k=10):
 k-NN classifier with the weighted inner product of MLC as a distance function
 TO BE UPDATED!!!!
 Input Arguments:
-Xtrain: training set, a 2-d gene expression array (#genes_train x #samples)
-ytrain: training labels, a label vector of length #genes_train, y[i] == 1 iff gene i is annotated with the Go term/pathway in question and 0 otherwise
-Xtest:  test set, a 2-d gene expression array (#genes_test x #samples)
-w:      an array of size #samples that contains the weights learned by MLC during training
-k:      the number of nearest neighbors to consider
+Xtrain:  training set, a 2-d gene expression array (#genes_train x #samples)
+ytrain:  training labels, a label vector of length #genes_train, y[i] == 1 iff gene i is annotated with the Go term/pathway in question and 0 otherwise
+Xtest:   test set, a 2-d gene expression array (#genes_test x #samples)
+w:       an array of size #samples that contains the weights learned by MLC during training
+method:  
+k:       the number of nearest positive neighbors to consider, ignored if method is 'max'
 
 Returns:
-An array of size #genes_test containing the posterior probability that each gene is associated with the label
+An array of size #genes_test containing a score for each gene being associated with the label (the higher the score, the larger the probability)
 
 	'''
 	assert method == 'average' or method == 'max'
